@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/movie-catalog-service")
+@RequestMapping("/movie-catalog")
 public class MovieCatalogController {
     
     @Autowired  //consummer
@@ -32,11 +32,11 @@ public class MovieCatalogController {
         // Movie movie  = rest.getForObject("http://localhost:81/movie-info-service/1", Movie.class);      
         // get all  rated movies 
         
-        UserRating ratings = rest.getForObject("http://localhost:83/rating-data-service/users/"+userID, UserRating.class);
+        UserRating ratings = rest.getForObject("http://RATING-DATA-SERVICE/rating-data/users/"+userID, UserRating.class);
         
         return ratings.getUserRating().stream().map(rating -> {
             // for each movie ID, call movie info service and get details 
-            Movie movie = rest.getForObject("http://localhost:81/movie-info-service/"+rating.getMovieID(), Movie.class);
+            Movie movie = rest.getForObject("http://MOVIE-INFO-SERVICE/movie-info/"+rating.getMovieID(), Movie.class);
             // put them all together 
             return new CatalogItem(movie.getName(), "Test", rating.getRating());
         }).collect(Collectors.toList());

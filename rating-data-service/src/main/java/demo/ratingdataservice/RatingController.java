@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rating-data-service")
+@RequestMapping("/rating-data")
 public class RatingController {
     @GetMapping("/{movieID}")
     public Rating getRating(@PathVariable("movieID") String movieID){
