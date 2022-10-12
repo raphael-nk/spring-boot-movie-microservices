@@ -21,6 +21,7 @@ public class MovieInfoController {
     @GetMapping("/{movieID}")
     public Movie getMovieInfo(@PathVariable("movieID") String movieID){
         MovieSummary movieSummary = rest.getForObject("https://api.themoviedb.org/3/movie/"+ movieID+ "?api_key=" + apiKey, MovieSummary.class);
+        assert movieSummary != null;
         return new Movie(movieID, movieSummary.getTitle(), movieSummary.getOverview());
     }
 }

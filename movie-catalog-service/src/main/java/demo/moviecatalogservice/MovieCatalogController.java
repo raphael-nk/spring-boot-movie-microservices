@@ -1,5 +1,6 @@
 package demo.moviecatalogservice;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class MovieCatalogController {
     private WebClient.Builder builder;
     
     @GetMapping("/{userID}")
+    @HystrixCommand(fallbackMethod = "getFallbackCatalog")
     public List<CatalogItem> getCatalog(@PathVariable("userID") String userID){
 
         // RestTemplate rest = new RestTemplate();
@@ -40,7 +42,12 @@ public class MovieCatalogController {
             // put them all together 
             return new CatalogItem(movie.getName(), "Test", rating.getRating());
         }).collect(Collectors.toList());
-    }    
+    }
+
+    // getFallbackCatalog signature should be the same as getCatalog
+    public List<CatalogItem> getFallbackCatalog(@PathVariable("userID") String userID){
+        return Arrays.asList(new CatalogItem("No Movie", "", 0));
+    }
 }
 
 /*Movie movie = builder.build()
