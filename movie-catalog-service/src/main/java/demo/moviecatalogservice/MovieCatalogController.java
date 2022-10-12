@@ -26,27 +26,23 @@ public class MovieCatalogController {
     @Autowired
     private WebClient.Builder builder;
     
+    @Autowired
+    private MovieInfo movieInfo; 
+    
+    @Autowired
+    private UserRatingInfo userRatingInfo;
+    
     @GetMapping("/{userID}")
-    @HystrixCommand(fallbackMethod = "getFallbackCatalog")
     public List<CatalogItem> getCatalog(@PathVariable("userID") String userID){
 
         // RestTemplate rest = new RestTemplate();
         // Movie movie  = rest.getForObject("http://localhost:81/movie-info-service/1", Movie.class);      
         // get all  rated movies 
         
-        UserRating ratings = rest.getForObject("http://RATING-DATA-SERVICE/rating-data/users/"+userID, UserRating.class);
+        UserRating ratings = userRatingInfo.getUserRating(userID);
         
-        return ratings.getUserRating().stream().map(rating -> {
-            // for each movie ID, call movie info service and get details 
-            Movie movie = rest.getForObject("http://MOVIE-INFO-SERVICE/movie-info/"+rating.getMovieID(), Movie.class);
-            // put them all together 
-            return new CatalogItem(movie.getName(), "Test", rating.getRating());
-        }).collect(Collectors.toList());
-    }
-
-    // getFallbackCatalog signature should be the same as getCatalog
-    public List<CatalogItem> getFallbackCatalog(@PathVariable("userID") String userID){
-        return Arrays.asList(new CatalogItem("No Movie", "", 0));
+        return ratings.getUserRating().stream().map(rating ->  movieInfo.getCatalogItem(rating))
+                                               .collect(Collectors.toList());
     }
 }
 
