@@ -25,8 +25,8 @@ public class ConfigTest {
     @Value("${my.list.value}")
     private List<String> myListValue;
     
-    @Value("#{${dbValues}}") //  pull up key value from properties 
-    private Map<String, String> db;
+    /*@Value("#{${dbValues}}") //  pull up key value from properties 
+    private Map<String, String> db; */
     
     @Autowired
     private DBSetting db_setting;
@@ -36,10 +36,10 @@ public class ConfigTest {
         return myGreeting;
     }
     
-    @GetMapping("/hello")
+    /*@GetMapping("/hello")
     public String getHello(){
         return sayHello + " " + myListValue + " " +db;
-    }
+    } */
     
     @GetMapping("/configprops")
     public  String getDbSetting() {
