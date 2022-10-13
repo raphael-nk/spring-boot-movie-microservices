@@ -1,5 +1,6 @@
 package spring.config.springconfig;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,9 @@ public class ConfigTest {
     @Value("#{${dbValues}}") //  pull up key value from properties 
     private Map<String, String> db;
     
+    @Autowired
+    private DBSetting db_setting;
+    
     @GetMapping
     public String getGreeting(){
         return myGreeting;
@@ -35,5 +39,10 @@ public class ConfigTest {
     @GetMapping("/hello")
     public String getHello(){
         return sayHello + " " + myListValue + " " +db;
+    }
+    
+    @GetMapping("/configprops")
+    public  String getDbSetting() {
+        return db_setting.getHost() + ":" + db_setting.getPort();
     }
 }
