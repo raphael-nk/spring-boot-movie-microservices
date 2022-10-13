@@ -13,7 +13,7 @@ import java.util.Map;
 @RequestMapping("/test")
 public class ConfigTest {
     
-    @Value("${my.greeting}")      // pull up value from application.properties
+    @Value("${my.greeting}")      // pull up value from application.yml
     private String myGreeting;
     
     @Value("Some Static Message")
