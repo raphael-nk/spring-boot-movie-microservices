@@ -2,6 +2,7 @@ package spring.config.springconfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/test")
 public class ConfigTest {
     
     @Value("${my.greeting}")      // pull up value from application.yml
@@ -31,6 +31,9 @@ public class ConfigTest {
     @Autowired
     private DBSetting db_setting;
     
+    @Autowired
+    private Environment env; 
+    
     @GetMapping
     public String getGreeting(){
         return myGreeting;
@@ -44,5 +47,10 @@ public class ConfigTest {
     @GetMapping("/configprops")
     public  String getDbSetting() {
         return db_setting.getHost() + ":" + db_setting.getPort();
+    }
+    
+    @GetMapping("/env")
+    public String envDetails(){
+        return env.toString();
     }
 }
